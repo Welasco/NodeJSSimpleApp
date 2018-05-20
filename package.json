@@ -1,16 +1,19 @@
 {
-  "name": "node-alarm",
+  "name": "NodeJSSimpleApp",
   "version": "0.0.0",
-  "description": "NodeAlarm",
-  "main": "app.js",
+  "description": "NodeJSSimpleApp",
+  "main": "server.js",
   "author": {
-    "name": "vsantana"
+    "name": "Victor Santana"
+  },
+  "scripts": {
+    "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.15.2",
     "http": "0.0.0",
-    "serialport": "^4.0.7",
     "fs": "0.0.0",
-    "body-parser": "1.18.2"
+    "body-parser": "1.18.2",
+    "os": "0.1.1"
   }
 }

@@ -121,7 +121,7 @@ app.get("/instruct/pay-now", function(req,res) {
 //serverhttps.listen(443);
 // HTTP Server
 var serverhttp = http.createServer(app);
-serverhttp.listen(80);
+serverhttp.listen(3000);
 
 //http.createServer(sslOptions,app).listen(8000);
 function ConsoleLog(msg) {
