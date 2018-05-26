@@ -16,9 +16,13 @@ var sslOptions = {
 */
 
 // Loading Environment Variables
-var envPort = process.env.envPort
-var envbackend = process.env.envbackend
-var envbackendport = process.env.envbackendport
+var envPort = process.env.envPort || 3000;
+var envbackend = process.env.envbackend || "127.0.0.1";
+var envbackendport = process.env.envbackendport || 3001;
+
+console.log("HTTP Port: " + envPort);
+console.log("HTTP BackEnd Address: " + envbackend);
+console.log("HTTP BackEnd Port: " + envbackendport);
 
 app.use(bodyParser.json());
 app.get("/", function(req,res) {
