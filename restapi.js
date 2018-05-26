@@ -15,6 +15,9 @@ var sslOptions = {
   };
 */
 
+// Loading Environment Variables
+var envPort = process.env.envPort;
+
 app.use(bodyParser.json());
 app.get("/", function(req,res) {
     var hostname = os.hostname();
@@ -60,7 +63,7 @@ app.get("/api", function(req,res){
 //serverhttps.listen(443);
 // HTTP Server
 var serverhttp = http.createServer(app);
-serverhttp.listen(3001);
+serverhttp.listen(envPort);
 
 //http.createServer(sslOptions,app).listen(8000);
 function ConsoleLog(msg) {

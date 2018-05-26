@@ -15,6 +15,11 @@ var sslOptions = {
   };
 */
 
+// Loading Environment Variables
+var envPort = process.env.envPort
+var envbackend = process.env.envbackend
+var envbackendport = process.env.envbackendport
+
 app.use(bodyParser.json());
 app.get("/", function(req,res) {
     var hostname = os.hostname();
@@ -45,7 +50,7 @@ app.get("/", function(req,res) {
             html += "</b><br><b>Request received from: </b>" + ip
             html += "<br>User Agent: </b>"+ req.headers['user-agent']
             html += "<br>Forwarder IP: </b>"+ ipfw
-            html += "<br>Received Json: " + data
+            html += "<br>Received backend server Json: " + data
             html += "<br><br><b>Parsered Json</b>";
             html += "<br><b>HostName: </b>" + datajson.hostname;
             html += "<br><b>IP: </b>" + datajson.ip;
@@ -180,32 +185,41 @@ function webapicall(callbackapi) {
     
     var opts = {
       method: 'get',
-      host: '127.0.0.1',
-      port: '3001',
+      host: envbackend,
+      port: envbackendport,
       path: '/api',
       headers: {
       }
     };
   
     callback = function(res){
-        /*
-        req.on('error', function(err, req, res) {
-            console.log("err");
-          });
-        */
-        res.on('data',function(d){
-            resData += d;
-            //console.log("Logging resData in data 1: "+ resData);
-            //console.log("Logging resData in data 2: "+ d);
-            callbackapi(resData);
-
-        });
-        res.on('end', function(){
-            //console.log("End 3: " + resData);
-        });
+        try {
+            res.on('data',function(d){
+                resData += d;
+                //console.log("Logging resData in data 1: "+ resData);
+                //console.log("Logging resData in data 2: "+ d);
+                callbackapi(resData);
+    
+            });
+        } catch (error) {
+            callbackapi(JSON.stringify(res.message));
+        }
     }
 
-    var req = http.request(opts, callback).end();
+    var req = http.request(opts, callback);
+
+    /*
+    req.on('error', function(e){
+        console.log(e.message);
+    });
+    */
+
+    req.on('error', callback);
+    req.end();
+
+    //var req = http.request(opts, callback).on("error",function(e){
+    //    console.log("Request Error: " + e.message);
+    //});
 }
 
 
@@ -220,9 +234,4 @@ function webapicall(callbackapi) {
 //serverhttps.listen(443);
 // HTTP Server
 var serverhttp = http.createServer(app);
-serverhttp.listen(3000);
-
-//http.createServer(sslOptions,app).listen(8000);
-function ConsoleLog(msg) {
-    console.log(msg);
-}
+serverhttp.listen(envPort);
