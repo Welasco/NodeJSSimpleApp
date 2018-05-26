@@ -16,7 +16,7 @@ var sslOptions = {
 */
 
 // Loading Environment Variables
-var envPort = process.env.envPort;
+var envPort = process.env.envPort || 3001;
 
 app.use(bodyParser.json());
 app.get("/", function(req,res) {
