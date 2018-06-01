@@ -3,7 +3,7 @@ var net = require('net');
 
 var target = 'www.google.com'
 var port = 80
-var portexhaustion = 20
+var portexhaustion = 30000
 
 //var target = '52.183.253.208'
 //var port = 2800
