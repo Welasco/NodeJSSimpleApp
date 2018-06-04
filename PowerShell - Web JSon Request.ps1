@@ -1,4 +1,5 @@
 ﻿#curl -d '{"MyKey":"My Value"}' -H "Content-Type: application/json" http://127.0.0.1:3000/
+#curl -d '{"MyKey":"My Value"}' -H "Content-Type: application/json" http://127.0.0.1:3000/api/jsonpost -x 127.0.0.1:8888
 
 # Avoiding SSL Warning for invalid certificate
 ##############################################

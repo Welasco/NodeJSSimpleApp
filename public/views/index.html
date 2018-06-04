@@ -1,0 +1,26 @@
+<html>
+    <body><h1>Node.JS SimpleWebSite Query</h1>
+        <br>
+        <b>Host Name: <%= hostname %></b>
+        <br>
+        <b>Request received from: </b> <%= ip %>
+        <br>User Agent: </b> <%= useragent %>
+        <br>Forwarder IP: </b> <%= ipfw %>
+        <script>
+            var currentURL = window.location.hostname + ":" + window.location.port;
+            var f = "http://" + currentURL + "/tcpportexhaustion";
+            var burl = "http://" + currentURL + "?api";
+            
+            document.write('<br>' + burl);
+            
+            //var form = "http://" + currentURL + "/tcpportexhaustion";
+            document.write('<br>' + f);
+        </script>
+        <br>
+        <button type="button" onclick="alert(burl)">Click Me!</button>
+        <br><br>
+        <button type="button" onclick="window.location.href=burl">RestAPI</button>
+        <br><br>
+        <button type="button" onclick="window.location.href=f">TCPPortExhaustion</button>
+    </body>
+</html>

@@ -1,0 +1,43 @@
+<html>
+	<head>
+		<title>jsonp test</title>
+    </head>
+    <body>
+        <div id="select_div"><a href="#" id="select_link1232">Test</a></div>    
+        <form name="myform" action="#" id="formdata" method="POST">
+            Username: <input type="text" id="user" name="username"/><br/>
+            Password: <input type="password" id="password" name="password"/>
+            <input type="submit" id="login" value="Login"/>
+        </form>   
+		<script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>		
+        <script type="text/javascript">
+            $('#user').val('DefaultUser');
+            var formdata = $("#formdata").serialize();
+            $(function(){	
+                var currentURL = window.location.hostname + ":" + window.location.port;
+                var purl = "http://" + currentURL + "/api/jsonpost";
+
+                $('#login').click(function(e){
+                    e.preventDefault();
+                    var data = {};
+                    data.user = $('#user').val();
+                    data.pass = $("#password").val();                     
+                    console.log('login clicked');
+                    console.log("Log User: " + data.user); 
+                    console.log("Log Pass: " + data.pass); 
+                    console.log("FormData: " + formdata); 
+					alert(data.user);
+					$.ajax({
+						type: 'POST',
+                        data: JSON.stringify(data),
+                        //data: data,
+				        contentType: 'application/json',
+                        url: purl,						
+                        success: function(){alert("Sucess!");console.log(data);}, 
+                        error: function(){alert("Error!");}
+                    })
+                });				
+            });
+        </script>             
+    </body>
+</html>

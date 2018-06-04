@@ -2,18 +2,9 @@ var http = require("http");
 var https = require('https');
 var express = require("express");
 var bodyParser = require('body-parser')
-var os = require('os')
+var os =require('os')
 var fs = require('fs');
 var app = express();
-var nconf = require('nconf');
-var spawn = require('child_process').spawn;
-var netstat = require('node-netstat');
-
-nconf.file({ file: './childstatus.json' });
-//nconf.use('memory');
-nconf.set('pid', null);
-nconf.save();
-
 console.log("Modules Loaded");                                                                                              
 
 /*
@@ -139,50 +130,19 @@ app.get("/tcpportexhaustion", function(req,res) {
     var ip = req.ip;
     var ip = (ip.split(":"))[3];
     var ipfw = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    //var prechildpid = nconf.get('pid');
-    
-    console.log("Request received at /tcpportexhaustion: " + prechildpid);
+    console.log("Request received at /tcpportexhaustion: " + ip);
+    res.sendfile(__dirname + '/public/form.html');
 
-    var prechildpid = nconf.get('pid');
-    var htmlvar = {
-        childprocessID: prechildpid
-    };
-    //console.log("PID: " + htmlvar.test);
-    console.log("childprocessID: " + htmlvar.childprocessID);
-
-    res.render("form.html", htmlvar);
-
-    //res.sendfile(__dirname + '/public/form.html');
     //res.end();
 });
 
-app.post("/api/tcpportexhaustion", function(req,res){
+app.post("/tcpportexhaustion", function(req,res){
     var ip = req.ip;
     var ip = (ip.split(":"))[3];
     var ipfw = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    var procDetails = req.body;
-    console.log("Request received at /tcpportexhaustion using POST from: " + ip + " Forwarder IP: " + ipfw + "TestJson: " + req.body.target);
-    console.log("procDetails: " + procDetails.connections);
-    //var child = spawn('my-command');
-    //child.kill();
-    
-    //var child = spawn("node tcpportexhaustion.js " + procDetails.target + " " + procDetails.port + " " + procDetails.connections, {detached: true});
-    //var child = spawn('node', ['tcpportexhaustion.js', procDetails.target, procDetails.port, procDetails.connections], {detached: true});
-    if (procDetails.status == 'Run') {
-        var child = spawn('node', ['tcpportexhaustion.js', procDetails.target, procDetails.port, procDetails.connections], {detached: true});
-        nconf.set('pid', child.pid);
-        nconf.save();
-    }
-    else if (procDetails.status == 'Stop') {
-        var prechildpid = nconf.get('pid');
-        console.log("Killing process: " + prechildpid);
-        process.kill(prechildpid);
-        nconf.set('pid', null);
-        nconf.save();        
-    }
-    
-    //var child = spawn("calc.exe", {detached: true});
-    //process.kill(-child.pid);
+    console.log("Request received at /tcpportexhaustion using POST from: " + ip + " Forwarder IP: " + ipfw);
+    console.log(req.body);      // your JSON
+    console.log(req.body.name);      // your JSON
     res.send(req.body);    // echo the result back    
     res.end();
 });
@@ -225,6 +185,67 @@ app.post("/api/jsonpost", function(req,res){
     console.log("Request received at /api/jsonpost from: " + ip + " Forwarder IP: " + ipfw);
     console.log(req.body);      // your JSON
     res.send(req.body);    // echo the result back    
+    res.end();
+});
+
+
+app.get("/instruct", function(req,res) {
+    var ip = req.ip;
+    var ip = (ip.split(":"))[3];
+    var ipfw = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    var url = req.url;
+    var urlquery = url.split('?');
+    var query = "";
+
+    if(urlquery.length >= 2){
+        query = urlquery[1];
+    }
+    else{
+        query = "";
+    }
+
+    console.log("Request received at /api/json from: " + ip);
+    res.send("<html><body><h1>Instruct Test - Windows Server</h1><br><b>Full Url: </b>"+ url +"<br><b>URL Query: </b>" + query + "<br><b>Request received from: </b>" + ip + "<br><b>User Agent: </b>"+ req.headers['user-agent'] +"<br><b>Forwarder IP: </b>"+ ipfw +"</body></html>")
+    res.end();
+});
+
+app.get("/instruct/pay-later", function(req,res) {
+    var ip = req.ip;
+    var ip = (ip.split(":"))[3];
+    var ipfw = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    var url = req.url;
+    var urlquery = url.split('?');
+    var query = "";
+
+    if(urlquery.length >= 2){
+        query = urlquery[1];
+    }
+    else{
+        query = "";
+    }
+
+    console.log("Request received at Instruct/pay-later from: " + ip);
+    res.send("<html><body><h1>Instruct/pay-later Test - Windows Server</h1><br><b>Full Url: </b>"+ url +"<br><b>URL Query: </b>" + query + "<br><b>Request received from: </b>" + ip + "<br><b>User Agent: </b>"+ req.headers['user-agent'] +"<br><b>Forwarder IP: </b>"+ ipfw +"</body></html>")
+    res.end();
+});
+
+app.get("/instruct/pay-now", function(req,res) {
+    var ip = req.ip;
+    var ip = (ip.split(":"))[3];
+    var ipfw = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    var url = req.url;
+    var urlquery = url.split('?');
+    var query = "";
+
+    if(urlquery.length >= 2){
+        query = urlquery[1];
+    }
+    else{
+        query = "";
+    }
+
+    console.log("Request received at Instruct/pay-now from: " + ip);
+    res.send("<html><body><h1>Instruct/pay-now - Windows Server</h1><br><b>Full Url: </b>"+ url +"<br><b>URL Query: </b>" + query + "<br><b>Request received from: </b>" + ip + "<br><b>User Agent: </b>"+ req.headers['user-agent'] +"<br><b>Forwarder IP: </b>"+ ipfw +"</body></html>")
     res.end();
 });
 

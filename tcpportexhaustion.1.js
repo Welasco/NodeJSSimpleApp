@@ -1,13 +1,10 @@
 #!/usr/bin/env nodejs
 var net = require('net');
 
-var args = process.argv.slice();
 
-console.log(args);
-
-var target = args[2] || 'www.google.com'
-var port = args[3] || 80
-var portexhaustion = args[4]-1 || 9
+var target = 'www.google.com'
+var port = 80
+var portexhaustion = 30000
 
 //var target = '52.183.253.208'
 //var port = 2800

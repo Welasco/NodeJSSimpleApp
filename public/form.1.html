@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>CSS3 Contact Form</title>
+    </head>
+    <body>
+        <div id="contact">
+            <h1>Send an email</h1>
+            <form action="/api/jsonpost" method="post">
+                <fieldset>
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" placeholder="Enter your full name" />
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" placeholder="Enter your email address" />
+
+                    <label for="message">Message:</label>
+                    <textarea id="message" placeholder="What's on your mind?"></textarea>
+
+                    <input type="submit" value="Send message" />
+
+                </fieldset>
+            </form>
+        </div>
+        <br><br>
+        <form name="myform" action="#" method="POST">
+                Username: <input type="text" id="user" name="username"/><br/>
+                Password: <input type="password" id="pass" name="password"/>
+                <input type="submit" id="login" value="Login"/>
+        </form>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script type="text/javascript">
+            var user=$('#user').val(), pass=$('#pass').val();
+            $('login').bind('click', function() {
+                $.ajax('/api/jsonpost', {
+                    type: 'POST',
+                    contentType: 'text/json',
+                    data: JSON.stringify({username:user, password:pass}),
+                    complete: function() { /* Do something with the response. */ }
+                });
+                return false; // Prevent form submit.
+            });
+        </script>
+    </body>
+</html>

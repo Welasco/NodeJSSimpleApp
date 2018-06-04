@@ -1,0 +1,65 @@
+<html>
+	<head>
+		<title>jsonp test</title>
+    </head>
+    <body>
+        
+        <form name="form" action="#" id="formdata" method="POST">
+            Target: <input type="text" id="target" name="target" value="www.google.com"/><br/>
+            Port: <input type="number" id="port" name="port" value="80"/><br/>
+            Number of Connections: <input type="number" id="connections" name="connections" value="30"/><br/>
+            <input type="submit" id="run" value="Run"/>
+        </form>   
+        
+		<script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>		
+        <script type="text/javascript">
+            //var formdata = $("#formdata").serialize();
+            var childprocessID =  '<%= childprocessID %>';
+            if (childprocessID != null && childprocessID != "") {
+                $("#run").val('Stop');
+            } 
+            else {
+                $("#run").val('Run');
+            }
+
+            //alert(childprocessID);
+            $(function(){	
+                var currentURL = window.location.hostname + ":" + window.location.port;
+                var purl = "http://" + currentURL + "/api/tcpportexhaustion";
+
+                $('#run').click(function(e){
+                    e.preventDefault();
+                    var data = {};
+                    data.target = $('#target').val();
+                    data.port = $("#port").val();
+                    data.connections = $("#connections").val();
+                    data.status = $("#run").val();
+                    console.log("Log Target: " + data.target); 
+                    console.log("Log Port: " + data.port); 
+                    console.log("Log Connections: " + data.connections);
+                    console.log("Log Button: " + data.button);
+                    
+                    //console.log("FormData: " + formdata);
+                    //alert(data.user);
+                    if (data.status == 'Run') {
+                        $("#run").val('Stop');
+                    }
+                    else if (data.status == 'Stop') {
+                        $("#run").val('Run');
+                    }
+                    
+                    $.ajax({
+                            type: 'POST',
+                            data: JSON.stringify(data),
+                            //data: data,
+                            contentType: 'application/json',
+                            url: purl,						
+                            success: function(){alert("Sucess!");console.log(data);}, 
+                            error: function(){alert("Error!");}
+                    });  
+                                      
+                });				
+            });
+        </script>             
+    </body>
+</html>
