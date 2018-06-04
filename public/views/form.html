@@ -11,56 +11,146 @@
             Number of Connections: <input type="number" id="connections" name="connections" value="30"/><br/>
             <input type="submit" id="run" value="Run"/>
         </form>   
-        
+        <br>
+        <div id="divRefresh"></div>
 		<script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>		
         <script type="text/javascript">
+
+            function apicall(type,data) {
+                var response = null;
+                if (type == 'POST') {
+                    $.ajax({
+                        type: 'POST',
+                        data: JSON.stringify(data),
+                        //data: data,
+                        contentType: 'application/json',
+                        url: purl,						
+                        success: function(){alert("Sucess!");console.log(data);}, 
+                        error: function(){alert("Error!");}
+                    });
+                }
+
+                if (type == 'GET') {
+                    response = $.ajax({
+                        type: 'GET',
+                        async: false,
+                        //data: JSON.stringify(data),
+                        //data: dataget,
+                        contentType: 'application/json',
+                        url: purl,						
+                        //success: function(dataget,data){alert(dataget);console.log(dataget);}, 
+                        /*
+                        success: function(res){
+                            alert("Success: " + res);
+                            console.log("DataGet: " + res.responseText);
+                            response = res;
+                        },
+                        */
+                        //sucess: data,
+                        //error: function(){alert("Error!");}
+                    });  
+                    console.log("Aresult: " + response.responseText);
+                    return response.responseText;                  
+                }
+
+            }
+
+            var varhtmlrunning = "PID: " + '<%= childprocessID %><br>';
+            varhtmlrunning += "NetstatCount: " + '<%= netstatcount %><br>';
+            varhtmlrunning += "Server Date: " + '<%= serverdate %><br>';
+            //varhtmlrunning += "<input type=\"submit\" id=\"refresh\" value=\"Refresh\"/>";
+            varhtmlrunning += "<button type=\"button\" id=\"refresh\" onclick=\"refresh()\">Refresh</button>"
+
+
             //var formdata = $("#formdata").serialize();
             var childprocessID =  '<%= childprocessID %>';
             if (childprocessID != null && childprocessID != "") {
                 $("#run").val('Stop');
+                //document.write(varhtmlrunning);
+                $('#divRefresh').html(varhtmlrunning);
             } 
             else {
                 $("#run").val('Run');
+                $('#divRefresh').html('');
             }
 
             //alert(childprocessID);
-            $(function(){	
-                var currentURL = window.location.hostname + ":" + window.location.port;
-                var purl = "http://" + currentURL + "/api/tcpportexhaustion";
+            var currentURL = window.location.hostname + ":" + window.location.port;
+            var purl = "http://" + currentURL + "/api/tcpportexhaustion";
 
-                $('#run').click(function(e){
-                    e.preventDefault();
-                    var data = {};
-                    data.target = $('#target').val();
-                    data.port = $("#port").val();
-                    data.connections = $("#connections").val();
-                    data.status = $("#run").val();
-                    console.log("Log Target: " + data.target); 
-                    console.log("Log Port: " + data.port); 
-                    console.log("Log Connections: " + data.connections);
-                    console.log("Log Button: " + data.button);
-                    
-                    //console.log("FormData: " + formdata);
-                    //alert(data.user);
-                    if (data.status == 'Run') {
-                        $("#run").val('Stop');
-                    }
-                    else if (data.status == 'Stop') {
-                        $("#run").val('Run');
-                    }
-                    
-                    $.ajax({
-                            type: 'POST',
-                            data: JSON.stringify(data),
-                            //data: data,
-                            contentType: 'application/json',
-                            url: purl,						
-                            success: function(){alert("Sucess!");console.log(data);}, 
-                            error: function(){alert("Error!");}
-                    });  
-                                      
-                });				
+            $('#run').click(function(e){
+                e.preventDefault();
+                var data = {};
+                data.target = $('#target').val();
+                data.port = $("#port").val();
+                data.connections = $("#connections").val();
+                data.status = $("#run").val();
+                console.log("Log Target: " + data.target); 
+                console.log("Log Port: " + data.port); 
+                console.log("Log Connections: " + data.connections);
+                console.log("Log Button: " + data.button);
+                
+                //console.log("FormData: " + formdata);
+                //alert(data.user);
+                if (data.status == 'Run') {
+                    $("#run").val('Stop');
+                    $('#divRefresh').html(varhtmlrunning);
+                }
+                else if (data.status == 'Stop') {
+                    $("#run").val('Run');
+                    $('#divRefresh').html('');
+                }
+                apicall('POST',data)
+                /*
+                $.ajax({
+                        type: 'POST',
+                        data: JSON.stringify(data),
+                        //data: data,
+                        contentType: 'application/json',
+                        url: purl,						
+                        success: function(){alert("Sucess!");console.log(data);}, 
+                        error: function(){alert("Error!");}
+                });
+                */
+            });		
+            
+            /*
+            $('#refresh').on('click',function(e){
+                e.preventDefault();
+             
+                alert("REFRESH")
+                var response = apicall('GET');
+                console.log("Response: " + response);
+                var responseJson = JSON.parse(response);
+                console.log("ResponseJSON PID: " + responseJson.childprocessID);
+                console.log("ResponseJSON netstatcount: " + responseJson.netstatcount);
+                var varhtmlrefresh = "PID: " + responseJson.childprocessID + '<br>';
+                varhtmlrefresh += "NetstatCount: " + responseJson.netstatcount + '<br>';
+                //varhtmlrefresh += "<input type=\"submit\" id=\"refresh\" value=\"Refresh\"/><br>";
+                varhtmlrefresh += "<button type=\"button\" id=\"refresh\" onclick=\"refresh()\">Refresh</button>"
+
+                $('#divRefresh').html(varhtmlrefresh);
             });
+            */
+            
+            function refresh() {
+                alert("REFRESH")
+                var response = apicall('GET');
+                console.log("Response: " + response);
+                var responseJson = JSON.parse(response);
+                console.log("ResponseJSON PID: " + responseJson.childprocessID);
+                console.log("ResponseJSON netstatcount: " + responseJson.netstatcount);
+                console.log("ResponseJSON serverdate: " + responseJson.serverdate);
+                var varhtmlrefresh = "PID: " + responseJson.childprocessID + '<br>';
+                varhtmlrefresh += "NetstatCount: " + responseJson.netstatcount + '<br>';
+                varhtmlrefresh += "Server Date: " + responseJson.serverdate + '<br>';
+                //varhtmlrefresh += "<input type=\"submit\" id=\"refresh\" value=\"Refresh\"/><br>";
+                varhtmlrefresh += "<button type=\"button\" id=\"refresh\" onclick=\"refresh()\">Refresh</button>"
+
+                $('#divRefresh').html(varhtmlrefresh);
+            }
+            
+
         </script>             
     </body>
 </html>

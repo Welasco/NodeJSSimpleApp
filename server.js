@@ -146,15 +146,18 @@ app.get("/tcpportexhaustion", function(req,res) {
     console.log("Request received at /tcpportexhaustion: " + prechildpid);
     var netstatcount = 0;
     var prechildpid = nconf.get('pid');
+    var serverdate = null;
 
     if (prechildpid != null && prechildpid != "") {
         netstatcount = getNetstat(prechildpid);
+        serverdate = new Date();
         connections = 0;
     }
 
     var htmlvar = {
         childprocessID: prechildpid,
-        netstatcount: netstatcount
+        netstatcount: netstatcount,
+        serverdate: serverdate
     };
     console.log("NetstatCount: " + htmlvar.netstatcount);
     console.log("childprocessID: " + htmlvar.childprocessID);
@@ -196,6 +199,26 @@ app.post("/api/tcpportexhaustion", function(req,res){
     //var child = spawn("calc.exe", {detached: true});
     //process.kill(-child.pid);
     res.send(req.body);    // echo the result back    
+    res.end();
+});
+
+app.get("/api/tcpportexhaustion", function(req,res){
+    var netstatcount = 0;
+    var prechildpid = nconf.get('pid');
+    var serverdate = new Date();
+
+    if (prechildpid != null && prechildpid != "") {
+        netstatcount = getNetstat(prechildpid);
+        connections = 0;
+    }
+
+    var htmlvar = {
+        childprocessID: prechildpid,
+        netstatcount: netstatcount,
+        serverdate: serverdate
+    };
+    console.log("Request received at GET /api/tcpportexhaustion: " + htmlvar.netstatcount);
+    res.send(htmlvar);    // echo the result back    
     res.end();
 });
 

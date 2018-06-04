@@ -1,0 +1,31 @@
+
+<script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>		
+<script type="text/javascript">
+    var custIdentifier = '<&#37;=customerIdentifier%>';
+    $(document).ready(function() {
+        $("#showAnnualReport").click(function()
+        {
+            //$('#annualreportview').html('');
+            //$.get("annual-report-process.asp?customer="+custIdentifier,function(data){
+            //   $('#annualreportview').html(data);
+            //});
+            $('#annualreportview').html("test");
+            //alert("test");
+            return false;
+        });
+        $("#showSubReport").click(function()
+        {
+            $("#subreportview").html('');
+            $.get("sub-report-process.asp?customer="+custIdentifier,function(data){
+               $("#subreportview").html(data);
+            });
+            return false;
+        });
+    });
+    </script>
+    
+    
+    <a href="#" id="showAnnualReport">Show Annual Report</a>
+    <div id="annualreportview"></div>
+    <a href="#" id="showSubReport">Show Sub Report</a>
+    <div id="subreportview"></div>
