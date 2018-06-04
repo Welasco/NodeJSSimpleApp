@@ -25,7 +25,7 @@
                         //data: data,
                         contentType: 'application/json',
                         url: purl,						
-                        success: function(){alert("Sucess!");console.log(data);}, 
+                        success: function(){/*alert("Sucess!");console.log(data);*/}, 
                         error: function(){alert("Error!");}
                     });
                 }
@@ -134,7 +134,7 @@
             */
             
             function refresh() {
-                alert("REFRESH")
+                //alert("REFRESH")
                 var response = apicall('GET');
                 console.log("Response: " + response);
                 var responseJson = JSON.parse(response);
