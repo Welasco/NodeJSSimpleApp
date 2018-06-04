@@ -11,25 +11,25 @@ netstat({
     console.log(data.length);
 });
 */
-/*
+
 var connections = 0;
 var result = netstat({
     filter: {
         pid: 19780,
         protocol: 'tcp',
         state: 'ESTABLISHED'
-
-    }
+    },
+    sync: true
 }, function (data) {
     // a single line of data read from netstat
     connections += 1;
-    console.log(connections)
-    console.log(data)
+    //console.log(connections)
+    //console.log(data)
 });
 
 console.log(connections);
-*/
 
+/*
 function resultNetstat(data){
     console.log("test");
 }
@@ -62,4 +62,6 @@ function getNetstat(pid,callback) {
     });
 }
 
+//console.log(test);
 getNetstat('19780',resultNetstat);
+*/

@@ -16,6 +16,8 @@ nconf.save();
 
 console.log("Modules Loaded");                                                                                              
 
+var connections = 0;
+
 /*
 var sslOptions = {
     key: fs.readFileSync('key.pem'),
@@ -142,12 +144,19 @@ app.get("/tcpportexhaustion", function(req,res) {
     //var prechildpid = nconf.get('pid');
     
     console.log("Request received at /tcpportexhaustion: " + prechildpid);
-
+    var netstatcount = 0;
     var prechildpid = nconf.get('pid');
+
+    if (prechildpid != null && prechildpid != "") {
+        netstatcount = getNetstat(prechildpid);
+        connections = 0;
+    }
+
     var htmlvar = {
-        childprocessID: prechildpid
+        childprocessID: prechildpid,
+        netstatcount: netstatcount
     };
-    //console.log("PID: " + htmlvar.test);
+    console.log("NetstatCount: " + htmlvar.netstatcount);
     console.log("childprocessID: " + htmlvar.childprocessID);
 
     res.render("form.html", htmlvar);
@@ -169,9 +178,12 @@ app.post("/api/tcpportexhaustion", function(req,res){
     //var child = spawn("node tcpportexhaustion.js " + procDetails.target + " " + procDetails.port + " " + procDetails.connections, {detached: true});
     //var child = spawn('node', ['tcpportexhaustion.js', procDetails.target, procDetails.port, procDetails.connections], {detached: true});
     if (procDetails.status == 'Run') {
-        var child = spawn('node', ['tcpportexhaustion.js', procDetails.target, procDetails.port, procDetails.connections], {detached: true});
-        nconf.set('pid', child.pid);
-        nconf.save();
+        var currentPid = nconf.get('pid');
+        if (currentPid == null) {
+            var child = spawn('node', ['tcpportexhaustion.js', procDetails.target, procDetails.port, procDetails.connections], {detached: true});
+            nconf.set('pid', child.pid);
+            nconf.save();            
+        }
     }
     else if (procDetails.status == 'Stop') {
         var prechildpid = nconf.get('pid');
@@ -273,6 +285,25 @@ function webapicall(callbackapi) {
     //var req = http.request(opts, callback).on("error",function(e){
     //    console.log("Request Error: " + e.message);
     //});
+}
+
+
+
+function getNetstat(pid) {
+    var result = netstat({
+        filter: {
+            pid: pid,
+            protocol: 'tcp',
+            state: 'ESTABLISHED'
+        },
+        sync: true
+    }, function (data) {
+        // a single line of data read from netstat
+        connections += 1;
+        //console.log(connections)
+        //console.log(data)
+    });
+    return connections;
 }
 
 
