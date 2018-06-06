@@ -1,0 +1,59 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: nodejssimpleappback
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nodejssimpleappback
+    spec:
+      containers:
+      - name: nodejssimpleappback
+        image: welasco/nodejssimpleapprest:latest
+        ports:
+        - containerPort: 3001
+          name: back
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejssimpleappback
+spec:
+  ports:
+  - port: 3001
+  selector:
+    app: nodejssimpleappback
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: nodejssimpleappfront
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nodejssimpleappfront
+    spec:
+      containers:
+      - name: nodejssimpleappfront
+        image: welasco/nodejssimpleapp:latest
+        ports:
+        - containerPort: 3000
+          name: back
+        env:
+        - name: envbackend
+          value: "nodejssimpleappback"              
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejssimpleappfront
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 3000
+  selector:
+    app: nodejssimpleappfront
