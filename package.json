@@ -1,7 +1,8 @@
 {
   "name": "nodejssimpleaapp",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "NodeJSSimpleApp",
+  "license": "Free",
   "main": "server.js",
   "author": {
     "name": "Victor Santana"
