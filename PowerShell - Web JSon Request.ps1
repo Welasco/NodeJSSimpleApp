@@ -28,3 +28,4 @@ $response = Invoke-RestMethod -Uri "https://<FQDN or IP>/api/jsonpost" -Method P
 
 #test tag v1
 # test tag v2
+# test tag v3
