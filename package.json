@@ -2,10 +2,14 @@
   "name": "nodejssimpleaapp",
   "version": "0.0.1",
   "description": "NodeJSSimpleApp",
-  "license": "Free AutoBuild",
+  "license": "UNLICENSED",
   "main": "server.js",
   "author": {
     "name": "Victor Santana"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Welasco/NodeJSSimpleApp.git"
   },
   "scripts": {
     "start": "node server.js"
