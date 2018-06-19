@@ -1,0 +1,33 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: nodejssimpleappfront
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nodejssimpleappfront
+    spec:
+      containers:
+      - name: nodejssimpleappfront
+        image: welasco/nodejssimpleapp:latest
+        ports:
+        - containerPort: 3000
+          name: front
+        env:
+        - name: envbackend
+          value: "nodejssimpleappback"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejssimpleappfront
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 3000
+  selector:
+    app: nodejssimpleappfront

@@ -1,0 +1,31 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: nodejssimpleapppfront
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nodejssimpleapppfront
+    spec:
+      containers:
+      - name: nodejssimpleapppfront
+        image: welasco/nodejssimpleapp:latest
+        ports:
+        - containerPort: 3000
+          name: frontp
+        env:
+        - name: envbackend
+          value: "nodejssimpleapppback"              
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejssimpleapppfront
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 3000
+  selector:
+    app: nodejssimpleapppfront
