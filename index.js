@@ -40,6 +40,11 @@ app.get("/", function(req,res) {
 
 });
 
+app.get('*', function(req, res){
+    console.log("got a 404 but I'm answering back a 500");
+    //res.send('what???', 404);
+    res.status(500).send('Page not found! NodeJS')
+  });
 
 //var serverhttp = http.createServer(app).listen(process.env.PORT);
 http.createServer(app).listen(process.env.PORT);
