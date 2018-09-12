@@ -26,3 +26,12 @@ $JSON = @'
 
 $response = Invoke-RestMethod -Uri "https://<FQDN or IP>/api/jsonpost" -Method Post -Body $JSON -ContentType "application/json" -UserAgent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36"
 
+# Test a Redirect in a website and specify a Host header entry.
+Invoke-WebRequest -Uri http://64.25.21.216 -MaximumRedirection 0 -Headers @{Host= 'jetblue.com'}
+
+# Force TLs 1.2
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+Invoke-WebRequest -Uri http://64.25.21.216 -Headers @{Host= 'jetblue.com'}
+
+# Using curl
+curl --verbose http://jetblue.com --header 'Host: jetblue.com'
