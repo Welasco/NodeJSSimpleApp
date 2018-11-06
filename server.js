@@ -263,6 +263,17 @@ app.post("/api/jsonpost", function(req,res){
     res.end();
 });
 
+app.put("/api/jsonpost", function(req,res){
+    var ip = req.ip;
+    var ip = (ip.split(":"))[3];
+    var ipfw = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    console.log("Request received at /api/jsonpost PUT from: " + ip + " Forwarder IP: " + ipfw);
+    console.log("Headers: " + JSON.stringify(req.headers));
+    console.log(req.body);      // your JSON
+    res.send(JSON.stringify(req.body));    // echo the result back    
+    res.end();
+});
+
 //////////////////////////////////////
 /////    Calling API              ////
 //////////////////////////////////////
